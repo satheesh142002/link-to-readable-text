@@ -1,7 +1,9 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TextQuote } from 'lucide-react';
+import { TextQuote, HelpCircle } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const Navbar = () => {
   return (
@@ -14,6 +16,20 @@ const Navbar = () => {
               <span className="text-xl font-semibold">LinkToText</span>
             </Link>
           </div>
+          <div className="flex items-center">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <HelpCircle className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-sm">
+                  <p>Enter any URL to extract readable text. If a link doesn't work, try adding 'https://' or a different link.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </div>
     </nav>
@@ -21,3 +37,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
