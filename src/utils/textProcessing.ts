@@ -2,6 +2,14 @@
 // Extract text content from HTML
 export const extractTextFromHtml = (html: string): string => {
   try {
+    // Check if we have HTML content
+    if (!html || typeof html !== 'string') {
+      console.error("Invalid HTML content received");
+      return "";
+    }
+    
+    console.log("Parsing HTML content...");
+    
     // Create a DOM parser and parse the HTML
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -14,6 +22,8 @@ export const extractTextFromHtml = (html: string): string => {
       '[class*="newsletter"], [class*="social"], [class*="sharing"]'
     );
     elementsToRemove.forEach(element => element.remove());
+    
+    console.log("Removed unnecessary elements, extracting content...");
 
     // Extract content from main content areas
     const contentSelectors = [
@@ -40,6 +50,7 @@ export const extractTextFromHtml = (html: string): string => {
     for (const selector of contentSelectors) {
       const elements = doc.querySelectorAll(selector);
       if (elements.length > 0) {
+        console.log(`Found content using selector: ${selector}`);
         elements.forEach(el => {
           mainContent += el.textContent + '\n\n';
         });
@@ -49,6 +60,7 @@ export const extractTextFromHtml = (html: string): string => {
     
     // If no main content was found, extract from body
     if (!mainContent.trim()) {
+      console.log("No main content found, extracting from paragraphs...");
       // First try to get text from paragraphs and headings
       const paragraphs = doc.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote, pre, code, dt, dd');
       paragraphs.forEach(p => {
@@ -60,6 +72,7 @@ export const extractTextFromHtml = (html: string): string => {
       
       // If still no content, get text from div elements that likely contain content
       if (!mainContent.trim()) {
+        console.log("No paragraphs found, extracting from divs...");
         const divs = Array.from(doc.querySelectorAll('div')).filter(div => {
           const text = div.textContent?.trim();
           return text && text.length > 100 && div.children.length < 5;
@@ -73,8 +86,11 @@ export const extractTextFromHtml = (html: string): string => {
     
     // If still no content, just take everything from body
     if (!mainContent.trim()) {
+      console.log("No structured content found, taking all body content");
       mainContent = doc.body.textContent || '';
     }
+    
+    console.log(`Extracted content length: ${mainContent.length} characters`);
     
     return mainContent;
   } catch (error) {
@@ -103,4 +119,3 @@ export const cleanText = (text: string): string => {
     // Trim the text
     .trim();
 };
-

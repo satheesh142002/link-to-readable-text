@@ -58,6 +58,13 @@ const TextOutput: React.FC<TextOutputProps> = ({ text, title, isLoading }) => {
     };
   }, []);
 
+  // For debugging
+  React.useEffect(() => {
+    console.log("TextOutput text:", text);
+    console.log("TextOutput title:", title);
+    console.log("TextOutput isLoading:", isLoading);
+  }, [text, title, isLoading]);
+
   return (
     <Card className="w-full max-w-3xl">
       <div className="flex items-center justify-between border-b p-4">

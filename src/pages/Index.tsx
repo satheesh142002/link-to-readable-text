@@ -7,22 +7,40 @@ import { convertLinkToText } from '../services/linkConverter';
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ExternalLink, FileText, Link as LinkIcon } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [convertedText, setConvertedText] = useState('');
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleConvertLink = async (url: string) => {
+    console.log(`Starting conversion for URL: ${url}`);
     setIsLoading(true);
+    setConvertedText(''); // Clear previous results
+    
     try {
       const { text, title } = await convertLinkToText(url);
+      console.log("Conversion successful:", { textLength: text.length, title });
+      
       setConvertedText(text);
       setTitle(title);
+      
+      toast({
+        title: "Conversion complete",
+        description: "Your link has been successfully converted to text.",
+      });
     } catch (error) {
       console.error('Error converting link:', error);
       setConvertedText('Error: Could not convert the link. Please try a different link or try again later.');
       setTitle('Error');
+      
+      toast({
+        title: "Conversion failed",
+        description: "We couldn't convert this link. Please try a different URL.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
