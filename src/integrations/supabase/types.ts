@@ -14,7 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      scrape_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          extractor_version: string
+          normalized_url: string
+          result: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          extractor_version: string
+          normalized_url: string
+          result: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          extractor_version?: string
+          normalized_url?: string
+          result?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
